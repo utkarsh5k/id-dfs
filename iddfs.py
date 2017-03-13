@@ -10,6 +10,7 @@ totalStates = 15
 targetState = 14
 
 states = []
+visit_order = []
 
 for i in xrange(totalStates):
     isGoal = False
@@ -25,10 +26,11 @@ for i in xrange( ( (totalStates+1) / 2 ) - 1):
 start_state = 0
 
 def dfs(current_state, current_depth):
+    global visit_order
     if current_depth < 0:
         return False
     else:
-        print current_state
+        visit_order.append(current_state)
         if states[current_state].isGoalState == True:
             return True
         current_depth -= 1
@@ -39,8 +41,11 @@ def dfs(current_state, current_depth):
         return False
 
 def iddfs(start_state, max_depth):
+    global visit_order
     for i in xrange(max_depth+1):
+        visit_order = []
         success = dfs(start_state, i)
+        print visit_order
         print success
         if success == True:
             return True, i
