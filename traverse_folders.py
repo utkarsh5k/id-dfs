@@ -11,8 +11,6 @@ def dfs_directory(root, filename, depth, formatstring):
     """
 
     """Terminate search if depth is exceeded"""
-    if depth < 0:
-        return None, False, depth
 
     files = [f for f in listdir(root) if isfile(join(root, f))]
     files.sort()
@@ -23,7 +21,10 @@ def dfs_directory(root, filename, depth, formatstring):
     """Terminal test: Test all the files for checking whether the reuqired file is found."""
     for f in files:
         if f == filename:
-            return join(root, f), True, depth
+            return join(root, f), True
+
+    if depth == 0:
+        return None, False
 
     directories = [d for d in listdir(root) if isdir(join(root, d))]
     directories.sort()
@@ -31,11 +32,11 @@ def dfs_directory(root, filename, depth, formatstring):
     for d in directories:
         new_path = join(root, d)
         print formatstring + "Folder: " + d
-        file_path, result, file_depth = dfs_directory(new_path, filename, depth - 1, "|   " + formatstring)
+        file_path, result = dfs_directory(new_path, filename, depth - 1, "|   " + formatstring)
         if result == True:
-            return file_path, result, file_depth
+            return file_path, result
 
-    return None, False, depth
+    return None, False
 
 def iddfs_directory(root, filename, depth, formatstring):
     """ Fuction to perform ID-DFS on Directory structure
@@ -48,7 +49,7 @@ def iddfs_directory(root, filename, depth, formatstring):
     for current_depth in xrange(depth+1):
         print "\nCurrent depth cut-off %d\n" % (current_depth)
         print "Root Directory: %s" % (root_path)
-        file_path, result, file_depth = dfs_directory(root_path, search_name, current_depth, formatstring)
+        file_path, result = dfs_directory(root_path, search_name, current_depth, formatstring)
         if result == True:
             return file_path, result, current_depth
 
